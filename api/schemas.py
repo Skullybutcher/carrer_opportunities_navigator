@@ -29,6 +29,7 @@ class PersonalInfoSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class EducationSchema(BaseModel):
     institution: str
@@ -41,6 +42,7 @@ class EducationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ExperienceSchema(BaseModel):
     company: str
@@ -54,6 +56,7 @@ class ExperienceSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class SkillSchema(BaseModel):
     name: str
@@ -62,6 +65,7 @@ class SkillSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ProjectSchema(BaseModel):
     title: str
@@ -73,6 +77,7 @@ class ProjectSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class AchievementSchema(BaseModel):
     title: str
@@ -82,6 +87,7 @@ class AchievementSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ExtracurricularSchema(BaseModel):
     activity: str
@@ -93,6 +99,7 @@ class ExtracurricularSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class CourseSchema(BaseModel):
     name: str
@@ -102,6 +109,7 @@ class CourseSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class CertificationSchema(BaseModel):
     name: str
@@ -112,6 +120,7 @@ class CertificationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class VolunteerWorkSchema(BaseModel):
     organization: str
@@ -122,6 +131,7 @@ class VolunteerWorkSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class PublicationSchema(BaseModel):
     title: str
@@ -133,6 +143,7 @@ class PublicationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ResumeSectionSchema(BaseModel):
     name: str

@@ -277,6 +277,7 @@ class AchievementSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ExtracurricularSchema(BaseModel):
     activity: str
@@ -307,6 +308,7 @@ class CertificationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class VolunteerWorkSchema(BaseModel):
     organization: str
@@ -328,6 +330,7 @@ class PublicationSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class ResumeSectionSchema(BaseModel):
     name: str

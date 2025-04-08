@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from api.routes import api
 from database.db import Base, engine
@@ -18,7 +18,7 @@ def create_app():
     
     @app.route('/')
     def index():
-        return "Career Opportunities Navigator API"
+        return render_template('index.html')
     
     return app
 
