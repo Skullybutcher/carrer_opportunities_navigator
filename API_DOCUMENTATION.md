@@ -1,102 +1,90 @@
 # Career Opportunities Navigator API Documentation
+**Version**: 1.0.0  
+**Last Updated**: 2023-11-15
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Authentication](#authentication)
+3. [Base URL](#base-url)
+4. [Versioning](#versioning)
+5. [User Management](#user-management)
+6. [Resume Management](#resume-management)
+7. [Resume Section Management](#resume-section-management)
+8. [Resume Processing](#resume-processing)
+9. [Error Handling](#error-handling)
 
 ## Introduction
 This API powers the Career Opportunities Navigator application, providing endpoints for:
-- User account management (registration, login)
+- User account management
 - Resume creation and management
-- Resume section management (personal info, education, experience, etc.)
-- Resume processing (parsing, optimization, and export)
-
-The API follows RESTful principles and returns JSON responses unless otherwise specified.
-
-## Base URL
-All endpoints are prefixed with: `/api/v1`
+- Resume section management
+- Resume processing (parsing, optimization, export)
 
 ## Authentication
-The API uses JWT (JSON Web Tokens) for authentication. Most endpoints require an Authorization header with a valid token.
+All endpoints (except `/users` and `/login`) require JWT authentication. Include the token in the Authorization header:
 
-To obtain a token:
-1. Register a user account via `/users` endpoint
-2. Login via `/login` endpoint to get your token
-3. Include the token in subsequent requests as:
-   `Authorization: Bearer {your_token}`
+```http
+Authorization: Bearer {your_token}
+```
+
+Tokens are obtained by:
+1. Registering via `POST /users`
+2. Logging in via `POST /login`
+
+## Base URL
+All endpoints are prefixed with: `https://api.careernavigator.example.com/api/v1`
+
+## Versioning
+API version is included in the base URL. Breaking changes will increment the version number (v1 → v2).
 
 ## User Management
 
 ### Register User
-**Endpoint**: `POST /users`
+`POST /users`
 
-**Description**: Creates a new user account. Email must be unique.
-
-**Request Body**:
+**Request**:
 ```json
 {
-  "name": "string",
-  "email": "user@example.com",
-  "password": "string"
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
 }
 ```
 
-**Response** (201 Created):
+**Success Response (201)**:
 ```json
 {
-  "id": "string",
-  "name": "string",
-  "email": "string",
-  "created_at": "datetime"
-}
-```
-
-**Errors**:
-- 400: Invalid request data (missing fields or invalid email)
-- 409: User with email already exists
-
-### Login User
-**Endpoint**: `POST /login`
-
-**Description**: Authenticates user and returns JWT token
-
-**Request Body**:
-```json
-{
-  "email": "user@example.com",
-  "password": "string"
-}
-```
-
-**Response** (200 OK):
-```json
-{
-  "access_token": "string",
-  "token_type": "bearer",
-  "user": {
-    "id": "string",
-    "name": "string",
-    "email": "string"
-  }
+  "id": "usr_123",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "created_at": "2023-11-15T10:00:00Z"
 }
 ```
 
 **Errors**:
-- 400: Invalid request data
-- 401: Invalid credentials
+- `400 Bad Request`: Invalid data
+- `409 Conflict`: Email exists
 
 ## Resume Management
 
-### Create Resume
-**Endpoint**: `POST /resumes`
+### Resume Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST   | `/resumes` | Create new resume |
+| GET    | `/users/{user_id}/resumes` | List user's resumes |
+| GET    | `/resumes/{resume_id}` | Get resume details |
+| PUT    | `/resumes/{resume_id}` | Update resume |
+| DELETE | `/resumes/{resume_id}` | Delete resume |
 
-**Description**: Creates a new resume for the authenticated user
-
-**Request Body**:
+**Sample Create Request**:
 ```json
 {
-  "user_id": "string",
-  "title": "string",
-  "summary": "string",
+  "user_id": "usr_123",
+  "title": "Software Engineer Resume",
+  "summary": "5+ years experience in full-stack development",
   "section_settings": [
     {
-      "name": "string",
+      "name": "education",
       "visible": true,
       "order": 1
     }
@@ -104,22 +92,192 @@ To obtain a token:
 }
 ```
 
-**Response** (201 Created):
+## Resume Section Management
+
+### Common Section Structure
+All section endpoints:
+- Use `resume_id` in path
+- Return 204 for DELETE
+- Use same error codes (401, 404)
+
+**Available Sections**:
+## Available Resume Sections
+
+### Personal Info
+**Fields**:
+- full_name
+- email
+- phone
+- location
+- linkedin_url
+- github_url
+- portfolio_url
+
+### Summary
+**Fields**:
+- content (professional summary/objective)
+
+### Education
+**Fields**:
+- institution
+- degree
+- field_of_study
+- start_date
+- end_date
+- gpa
+- description
+
+### Experience
+**Fields**:
+- company
+- position
+- location
+- start_date
+- end_date
+- current (boolean)
+- description
+- achievements
+
+### Skills
+**Fields**:
+- name
+- category (technical, soft, etc.)
+- proficiency (beginner, intermediate, expert)
+- years_of_experience
+
+### Projects
+**Fields**:
+- title
+- description
+- technologies
+- start_date
+- end_date
+- url
+
+### Achievements
+**Fields**:
+- title
+- description
+- date
+- issuer
+
+### Extracurriculars
+**Fields**:
+- activity_name
+- organization
+- role
+- start_date
+- end_date
+- description
+
+### Courses
+**Fields**:
+- course_name
+- institution
+- completion_date
+- description
+
+### Certifications
+**Fields**:
+- name
+- issuing_organization
+- issue_date
+- credential_id
+- credential_url
+
+### Volunteer Work
+**Fields**:
+- organization
+- role
+- start_date
+- end_date
+- description
+
+### Publications
+**Fields**:
+- title
+- authors
+- publication_venue
+- publication_date
+- url
+- description
+
+**Sample Education Update**:
 ```json
 {
-  "id": "string",
-  "user_id": "string",
-  "title": "string",
-  "summary": "string",
-  "section_settings": [...],
-  "created_at": "datetime",
-  "updated_at": "datetime"
+  "institution": "MIT",
+  "degree": "BSc Computer Science",
+  "gpa": 3.8,
+  "description": "Specialized in AI"
 }
 ```
 
-**Errors**:
-- 400: Invalid request data
-- 401: Unauthorized
-- 404: User not found
+## Resume Processing
 
-[Additional sections would continue here with similar detail for all endpoints]
+### Parse Resume
+`POST /resumes/parse`
+
+**Request**:  
+Send PDF as form-data with key `resume_file`
+
+**Response**:
+```json
+{
+  "personal_info": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "education": [
+    {
+      "institution": "MIT",
+      "degree": "BSc Computer Science"
+    }
+  ]
+}
+```
+
+### Optimize Resume
+`POST /resumes/{resume_id}/optimize`
+
+**Request**:
+```json
+{
+  "job_description": "Looking for Python developer with 5+ years experience...",
+  "optimization_level": "aggressive"
+}
+```
+
+**Response**:
+```json
+{
+  "score": 87.5,
+  "suggestions": [
+    "Add more Python-specific keywords",
+    "Highlight AWS experience"
+  ]
+}
+```
+
+### Export Resume
+`GET /resumes/{resume_id}/export?format=pdf&template=modern`
+
+**Response**:  
+PDF file with `Content-Disposition: attachment` header
+
+## Error Handling
+
+**Common Error Codes**:
+- `400 Bad Request`: Invalid data
+- `401 Unauthorized`: Missing/invalid token
+- `404 Not Found`: Resource doesn't exist
+- `500 Server Error`: Internal server error
+
+**Error Response Format**:
+```json
+{
+  "error": "not_found",
+  "message": "Resume not found",
+  "details": {
+    "resume_id": "res_456"
+  }
+}
